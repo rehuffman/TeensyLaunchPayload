@@ -110,12 +110,13 @@ void setup(){
     return;
   }
   dataFile = SD.open(filename.c_str(), FILE_WRITE);
+  dataFile.close();
   Serial.println("card initialized.");
 }
 
 void loop(void){
   unsigned long loop_start = millis();
-
+  dataFile = SD.open(filename.c_str(), FILE_WRITE);
   // Sample each sensor and write the output to the SD card log file and the
   // XBee on Serial3. If debugging is enabled, sensors are also written to
   // Serial for viewing with the Serial Monitor.
@@ -125,6 +126,7 @@ void loop(void){
     if (dataFile.isOpen()) {
       writers[i]->Write(&dataFile);
       dataFile.sync(); // sync changes to file and file allocation table, etc...
+      dataFile.close();
     }
     if (debug) {
       writers[i]->Write(&Serial);
